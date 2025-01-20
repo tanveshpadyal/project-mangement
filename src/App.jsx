@@ -5,6 +5,7 @@ import DisplayInfo from "./components/DisplayInfo";
 const App = () => {
   const [projectName, setProjectName] = useState([]);
   const [projectInfo, setProjectInfo] = useState([]);
+  const [task, setTask] = useState([]);
   const [componentName, setComponentName] = useState("");
   const [getIndex, setIndex] = useState(0);
 
@@ -15,7 +16,6 @@ const App = () => {
     setProjectInfo((prev) => [...prev, projectDetails]);
   }
 
-  // display components conditionally in <DisplayInfo/> component
   function DisplayComponents(comName) {
     setComponentName(comName);
   }
@@ -25,32 +25,39 @@ const App = () => {
   }
 
   function deleteProject() {
-    // projectInfo.splice(getIndex, 1);
-    console.log(projectInfo);
-    setProjectInfo((prev) => prev.splice(getIndex, 1));
-    setProjectName((prev) => prev.splice(getIndex, 1));
-    console.log(projectInfo);
+    setProjectInfo((prev) => prev.filter((_, i) => i !== getIndex));
+    setProjectName((prev) => prev.filter((_, i) => i !== getIndex));
+    setTask((prev) => prev.filter((task) => task.taskId !== getIndex));
+  }
+
+  const specTask = task.filter((value) => value.taskId === getIndex);
+
+  function addTask(taskname) {
+    setTask((prev) => [...prev, { taskId: getIndex, taskname }]);
+  }
+
+  function deleteTask(index) {
+    setTask((prev) => prev.filter((_, i) => i !== index));
   }
 
   return (
-    <>
-      <div className="myproject flex  flex-col md:flex-row">
-        {/* passing project name */}
-        <Sidebar
-          projectname={projectName}
-          listItem={listItem}
-          componentname={DisplayComponents}
-        />
-        {/* getting project title via props */}
-        <DisplayInfo
-          onclick={showData}
-          projectinfo={projectInfo[getIndex]}
-          componentname={DisplayComponents}
-          comName={componentName}
-          deleteproject={deleteProject}
-        />
-      </div>
-    </>
+    <div className="myproject flex flex-col md:flex-row">
+      <Sidebar
+        projectname={projectName}
+        listItem={listItem}
+        componentname={DisplayComponents}
+      />
+      <DisplayInfo
+        onclick={showData}
+        projectinfo={projectInfo[getIndex]}
+        componentname={DisplayComponents}
+        comName={componentName}
+        deleteproject={deleteProject}
+        task={specTask}
+        onAdd={addTask}
+        deleteTask={deleteTask}
+      />
+    </div>
   );
 };
 

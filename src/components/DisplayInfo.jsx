@@ -10,6 +10,9 @@ const DisplayInfo = ({
   comName,
   getIndex,
   deleteproject,
+  onAdd,
+  task,
+  deleteTask,
 }) => {
   switch (comName) {
     case "addProject":
@@ -27,6 +30,9 @@ const DisplayInfo = ({
           getIndex={getIndex}
           deleteproject={deleteproject}
           componentname={componentname}
+          onAdd={onAdd}
+          task={task}
+          deleteTask={deleteTask}
         />
       );
       break;
